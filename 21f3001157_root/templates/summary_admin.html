@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parking Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .topbar {
+            width: 100%;
+            background: #003366;
+            padding: 1rem 0.5rem 1rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+        }
+        .navbar-brand span {
+            color: #0074c2;
+            margin-right: 0.3rem;
+        }
+        .admin-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 2rem;
+        }
+        .admin-nav .btn {
+            background: #0074c2;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+            transition: background 0.2s;
+        }
+        .admin-nav .btn:hover, .admin-nav .btn.active {
+            background: #005fa3;
+            color: #fff;
+        }
+        .summary-container {
+            max-width: 900px;
+            margin: 0 auto 2rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px 24px 24px;
+        }
+        h2 {
+            color: #003366;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .btn-back {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            text-decoration: none;
+            transition: background 0.2s;
+            margin: 2rem auto 0 auto;
+            display: inline-block;
+        }
+        .btn-back:hover {
+            background: #005fa3;
+            color: #fff;
+            text-decoration: none;
+        }
+        .img-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .summary-container {
+                padding: 12px 2px 2px 2px;
+            }
+            .topbar, .admin-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .navbar-brand, .admin-nav {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="topbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand" style="text-decoration:none;">
+            <span>&#9608;</span>Reliable<span style="color:#0074c2;">Spaces</span>
+        </a>
+        <div class="admin-nav">
+            <a href="{{ url_for('users') }}" class="btn{% if request.endpoint == 'users' %} active{% endif %}">Users</a>
+            <a href="{{ url_for('summary') }}" class="btn{% if request.endpoint == 'summary' %} active{% endif %}">Summary</a>
+            <a href="{{ url_for('logout') }}" onclick="navigate('logout')" class="btn">Logout</a>
+        </div>
+    </div>
+    <div class="summary-container">
+        <h2>Parking Lots Summary</h2>
+        <div class="img-container">
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Parking Summary Chart" class="img-fluid"/>
+        </div>
+        <div style="text-align:center;">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn-back">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>    

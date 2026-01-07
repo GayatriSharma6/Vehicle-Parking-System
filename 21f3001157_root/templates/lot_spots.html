@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spots in {{ parking_lot.prime_location_name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .topbar {
+            width: 100%;
+            background: #003366;
+            padding: 1rem 0.5rem 1rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+        }
+        .navbar-brand span {
+            color: #0074c2;
+            margin-right: 0.3rem;
+        }
+        .admin-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 2rem;
+        }
+        .admin-nav .btn {
+            background: #0074c2;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+            transition: background 0.2s;
+        }
+        .admin-nav .btn:hover, .admin-nav .btn.active {
+            background: #005fa3;
+            color: #fff;
+        }
+        .spots-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px 24px 24px;
+        }
+        .spots-title {
+            color: #003366;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #f8fafc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px #0001;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #e3e3e3;
+            text-align: center;
+        }
+        th {
+            background-color: #e3f2fd;
+            color: #003366;
+            font-weight: 600;
+        }
+        .btn-view {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-view:hover {
+            background: #005fa3;
+            color: #fff;
+            text-decoration: none;
+        }
+        @media (max-width: 576px) {
+            .spots-container {
+                padding: 16px 4px 4px 4px;
+            }
+            .topbar, .admin-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .navbar-brand, .admin-nav {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="navbar-brand">
+            <span>&#9608;</span>Reliable<span style="color:#0074c2;">Spaces</span>
+        </div>
+        <div class="admin-nav">
+            <a href="{{ url_for('home') }}" class="btn{% if request.endpoint == 'home' %} active{% endif %}">Home</a>
+            <a href="{{ url_for('users') }}" class="btn{% if request.endpoint == 'users' %} active{% endif %}">Users</a>
+            <a href="{{ url_for('summary') }}" class="btn{% if request.endpoint == 'summary' %} active{% endif %}">Summary</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+    </div>
+    <div class="spots-container">
+        <div class="spots-title">Spots in {{ parking_lot.prime_location_name }}</div>
+        <div class="table-responsive">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                {% for spot in parking_lot.spots %}
+                <tr>
+                    <td>{{ spot.id }}</td>
+                    <td>
+                        {% if spot.status == 'A' %}
+                            <span class="text-success fw-bold">Available</span>
+                        {% elif spot.status == 'O' %}
+                            <span class="text-danger fw-bold">Occupied</span>
+                        {% else %}
+                            <span class="text-secondary">Unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('view_spot', spot_id=spot.id) }}" class="btn btn-view">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

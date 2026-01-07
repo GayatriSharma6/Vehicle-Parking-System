@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Parking Lot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .topbar {
+            width: 100%;
+            background: #003366;
+            padding: 1rem 0.5rem 1rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .navbar-brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
+        }
+        .navbar-brand span {
+            color: #0074c2;
+            margin-right: 0.3rem;
+        }
+        .admin-nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-right: 2rem;
+        }
+        .admin-nav .btn {
+            background: #0074c2;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+            transition: background 0.2s;
+        }
+        .admin-nav .btn:hover, .admin-nav .btn.active {
+            background: #005fa3;
+            color: #fff;
+        }
+        .delete-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 24px 24px 24px;
+        }
+        .delete-title {
+            color: #003366;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .details-label {
+            font-weight: 600;
+            color: #003366;
+        }
+        .btn-delete {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.6rem 0;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: background 0.2s;
+        }
+        .btn-delete:hover {
+            background: #219150;
+        }
+        .btn-cancel {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 0.6rem 0;
+            width: 100%;
+            transition: background 0.2s;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn-cancel:hover {
+            background: #c0392b;
+            color: #fff;
+            text-decoration: none;
+        }
+        .alert-warning {
+            color: #b94a48;
+            background-color: #f2dede;
+            border-color: #eed3d7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        @media (max-width: 576px) {
+            .delete-container {
+                padding: 16px 4px 4px 4px;
+            }
+            .topbar, .admin-nav {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .navbar-brand, .admin-nav {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="navbar-brand">
+            <span>&#9608;</span>Reliable<span style="color:#0074c2;">Spaces</span>
+        </div>
+        <div class="admin-nav">
+            <a href="{{ url_for('home') }}" class="btn{% if request.endpoint == 'home' %} active{% endif %}">Home</a>
+            <a href="{{ url_for('users') }}" class="btn{% if request.endpoint == 'users' %} active{% endif %}">Users</a>
+            <a href="{{ url_for('summary') }}" class="btn{% if request.endpoint == 'summary' %} active{% endif %}">Summary</a>
+            <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+        </div>
+    </div>
+    <div class="delete-container">
+        <div class="delete-title">Delete Parking Lot</div>
+        <div class="mb-3">
+            <span class="details-label">Prime Location:</span> {{ lot.prime_location_name }}
+        </div>
+        <div class="mb-3">
+            <span class="details-label">Address:</span> {{ lot.address }}
+        </div>
+        <div class="mb-3">
+            <span class="details-label">Pin Code:</span> {{ lot.pin_code }}
+        </div>
+        <div class="mb-3">
+            <span class="details-label">Price per Hour:</span> ₹{{ lot.price }}
+        </div>
+        <div class="mb-3">
+            <span class="details-label">Max Spots:</span> {{ lot.max_spots }}
+        </div>
+        {% if occupied_count > 0 %}
+            <div class="alert-warning">
+                ⚠️ This lot has {{ occupied_count }} occupied spot(s). You cannot delete it until all spots are free.
+            </div>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-cancel">Back</a>
+        {% else %}
+            <form method="POST">
+                <p>Are you sure you want to delete this lot?</p>
+                <button type="submit" class="btn btn-delete">Confirm Delete</button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-cancel mt-2">Cancel</a>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
